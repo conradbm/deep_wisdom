@@ -48,6 +48,8 @@ The goal of <em>DeepWisdom</em> is two-fold. First, offer a robust platform that
 <h2>Explore</h2>
 <p>Recommendation is powerful. We have algorithms that connect your text to deep wisdom lodged within scripture and the minds of hundreds of biblical scholars. Whatever word or phrase you are interested in deeping your understanding of, go ahead and explore. Even pasting full phrases or bible verses will illuminate a suite of cross references trained on by biblical scholars. With that, feel free to explore, your results will populate below.</p>
 <hr>
-<h2>Results</h2>
-<div id="resultsContainer">
-</div>
+<h2>Run</h2>
+<code>git clone git@github.com:conradbm/deep_wisdom.git</code>
+<code>cd /deep_wisdom/app</code>
+<code>python routes.py </code>
+<p>Please contact DeepWisdom support to obtain these data files, as they are not public.</p>
