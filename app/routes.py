@@ -71,6 +71,7 @@ def submit():
 		conn=get_db_connection()
 		searchText=request.form['search']
 		results=DW.query(conn, searchText)
+		#Consider json object being returned here.
 		results_string="<br>".join(["<strong>"+i[0]+"</strong>"+ " "+i[1] for i in results])
 		return results_string
 		

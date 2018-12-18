@@ -1,0 +1,9 @@
+user log in
+https://bootsnipp.com/snippets/featured/login-and-register-tabbed-form
+https://bootsnipp.com/snippets/featured/login-form-in-a-modal
+
+dashboards and charts
+https://stackoverflow.com/questions/32419730/defining-pie-chart-slice-colors-with-plotly
+https://bootsnipp.com/snippets/Rl85r
+https://bootsnipp.com/snippets/d2Zde
+https://bootsnipp.com/snippets/84D3
