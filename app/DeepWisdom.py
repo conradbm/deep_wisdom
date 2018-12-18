@@ -76,7 +76,7 @@ def select_book_chapter_verse(conn,params):
     return rows
 
 
-def get_db_connection(root_dir="app/",loc="data/bible.db"):
+def get_db_connection(root_dir="",loc="data/bible.db"):
     """ DATABASE CONNECTION """
     # connect
     print("Connecting to database.")

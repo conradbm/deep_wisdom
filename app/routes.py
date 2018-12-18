@@ -65,7 +65,7 @@ def submit():
 		print("Model not finished loading.")
 		with open("templates/explore.html", 'r') as handle:
 			text=handle.read().replace('\n','')
-		return "<div class='jumobtron'><h1>Model not finished loading yet ...</h1></div><br><br>"+text 
+		return "<div class='jumobtron'><h1>Model not finished loading yet ...</h1></div><br><br>"
 	else:
 		print("Searching")
 		conn=get_db_connection()
