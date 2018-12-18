@@ -89,7 +89,7 @@ def get_db_connection(root_dir="app/",loc="data/bible.db"):
 
 class DeepWisdom:
 
-    def __init__(self, root_dir="app/",db_loc="data/bible.db",):
+    def __init__(self, root_dir="",db_loc="data/bible.db",):
         print("Constructing DeepWisdom")
         mappings, tfidfs, data, model = self.load_data(root_dir=root_dir)
         self.kjv_bible_mapping=mappings[0]
