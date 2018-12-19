@@ -31,7 +31,7 @@ def async_create_class(args):
 Static HTML pages the user will get from navigating the site
 """
 @app.route('/')
-@app.route('/about.html')
+@app.route('/index.html')
 def index():
 
 	global initialized
@@ -40,17 +40,17 @@ def index():
 		async_create_class([])
 		initialized=True
 
-	return render_template("about.html")
+	return render_template("index.html")
 
-@app.route('/contact')
-@app.route('/contact.html')
-def contact():
-	return render_template("contact.html")
+@app.route('/charts')
+@app.route('/charts.html')
+def charts():
+	return render_template("charts.html")
 
-@app.route('/explore')
-@app.route('/explore.html')
-def explore():
-	return render_template("explore.html")
+@app.route('/tables')
+@app.route('/tables.html')
+def tables():
+	return render_template("tables.html")
 
 
 """
@@ -60,9 +60,10 @@ Functions from forms and other widgets
 def submit():
 	if DW is None:
 		print("Model not finished loading.")
-		with open("templates/explore.html", 'r') as handle:
-			text=handle.read().replace('\n','')
-		return "<div class='jumobtron'><h1>Model not finished loading yet ...</h1></div><br><br>"
+		text="<div class='jumobtron'><h1>Model not finished loading yet ...</h1></div><br><br>"
+		with open("templates/index.html", 'r') as handle:
+			text+=handle.read().replace('\n','')
+		return text
 	else:
 		print("Searching")
 		conn=get_db_connection()
