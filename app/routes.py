@@ -1,9 +1,10 @@
+import os
 from flask import Flask
 from flask import request
-import os
 from DeepWisdom import DeepWisdom, get_db_connection
 from threading import Thread
-from flask import render_template, json
+from flask import render_template, jsonify
+from core.plotting.plotting_transformers import pie_chart_reshape
 
 # Helper for killing python processes
 # pkill -f *.py
@@ -55,10 +56,6 @@ def explore():
 """
 Functions from forms and other widgets
 """
-
-
-##### LEFT OFF HERE #####
-
 @app.route('/submit', methods=['POST'])
 def submit():
 	if DW is None:
@@ -70,10 +67,14 @@ def submit():
 		print("Searching")
 		conn=get_db_connection()
 		searchText=request.form['search']
-		results=DW.query(conn, searchText)
+		search_dict=DW.query(conn, searchText)
 		#Consider json object being returned here.
-		results_string="<br>".join(["<strong>"+i[0]+"</strong>"+ " "+i[1] for i in results])
-		return results_string
+		#results_string="<br>".join(["<strong>"+i[0]+"</strong>"+ " "+i[1] for i in result_tuples])
+		pie_dict=pie_chart_reshape(searchText, search_dict)
+
+		results_dict={'search_results':search_dict,
+					  'pie_results':pie_dict}
+		return jsonify(results_dict)
 		
 		#return json.dumps(results_string)
 

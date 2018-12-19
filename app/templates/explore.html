@@ -13,9 +13,21 @@ Explore Page
   <title>DeepWisdom.AI</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- BOOTSTRAP -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  
+  <!-- JQUERY -->
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- PLOTLY -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- NAVBAR STYLE-->
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -29,10 +41,16 @@ Explore Page
     /* Set gray background color and 100% height */
     .sidenav {
       padding-top: 20px;
+      margin-right: 10px;
       background-color: #f1f1f1;
       height: 100%;
+      overflow:scroll;
     }
     
+    /* Make results div a scrollable results tab */
+    #resultsContainer{
+      
+    }
     /* Set black background color, white text and some padding */
     footer {
       background-color: #555;
@@ -50,11 +68,7 @@ Explore Page
     }
   </style>
 
-  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-  <!------ Include the above in your HEAD tag ---------->
-
+  <!-- SEARCH BAR -->
   <style>
     .search-form .form-group {
       float: right !important;
@@ -108,15 +122,37 @@ Explore Page
     }
   </style>
 
+    <!-- AJAX -->
     <script>
       $(document).ready(function(){
+
+        function results_div_string(raw_json_data){
+          var results_string="";
+          for (var key in raw_json_data) {
+              if (raw_json_data.hasOwnProperty(key)) {
+                  console.log(key + " -> " + raw_json_data[key]);
+                  results_string+="<p><font size=\"2\"><strong>"+key+"</strong>:"+raw_json_data[key]+"</font></p>";
+              }
+          }
+          results_string+="<hr>"
+          return results_string;
+        }
+
         $('#IdForm').on('submit',function (e) {
            $.ajax({
             type: 'post',
             url: '/submit',
             data: $('#IdForm').serialize(),
              success: function (results) {
-                document.getElementById("resultsContainer").innerHTML=results;
+                //console.debug(results);
+                
+                // Populate pie chart div
+                Plotly.newPlot('plot', results['pie_results'].data, results['pie_results'].layout);
+                // Populate results div
+                results_string=results_div_string(results["search_results"]);
+                //console.log(results_string);
+                //$('#resultsContainer').append(results_string);
+                document.getElementById("resultsContainer").innerHTML=results_string;
              }
             });
            e.preventDefault();
@@ -127,6 +163,7 @@ Explore Page
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -138,22 +175,33 @@ Explore Page
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="about.html">About</a></li>
+        <li><a href="#">About</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="active"><a href="#">Explore</a></li>
+        <li class="active"><a href="explore.html">Explore</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       </ul>
     </div>
   </div>
 </nav>
+
+<!-- MAIN CONTENT -->
 <div class="container-fluid text-center">    
   <div class="row content">
-    <div class="col-sm-2 sidenav" style="height:auto;">
+    <br>
+    <div class="col-sm-2 sidenav">
       <p><a href="#">Partners</a></p>
       <p><a href="#">Resources</a></p>
       <p><a href="#">Current R&D</a></p>
+      <div class="row content"><br>
+        <h4>Results</h4>
+          <div id="resultsContainer">
+          </div>
+          <hr>
+      </div>
+    </div>
+    <div class="col-sm-8 text-left">
     </div>
     <div class="col-sm-8 text-left"> 
     <img src="static/img/logo.png">
@@ -175,19 +223,11 @@ Explore Page
           </div>
       </div>
       <div class="row content">
-        <div class="col-sm-2 sidenav" style="height:auto;">
-          <p><a href="#">Chart here?</a></p>>
-        </div>
-      <h2>Explore</h2>
-      <p>Recommendation is powerful. We have algorithms that connect your text to deep wisdom lodged within scripture and the minds of hundreds of biblical scholars. Whatever word or phrase you are interested in deeping your understanding of, go ahead and explore. Even pasting full phrases or bible verses will illuminate a suite of cross references trained on by biblical scholars. With that, feel free to explore, your results will populate below.</p>
-      <hr>
-      <h2>Results</h2>
-      <div id="resultsContainer">
+        <h2>Explore</h2>
+        <p>Recommendation is powerful. We have algorithms that connect your text to deep wisdom lodged within scripture and the minds of hundreds of biblical scholars. Whatever word or phrase you are interested in deeping your understanding of, go ahead and explore. Even pasting full phrases or bible verses will illuminate a suite of cross references trained on by biblical scholars. With that, feel free to explore, your results will populate below.</p>
+        <hr>
+        <div id="plot" class="row" height="100" width="100"></div>
       </div>
-      <!--
-      <h3>Test</h3>
-      <p>Lorem ipsum...</p>
-    -->
     </div>
     <!--
     <div class="col-sm-2 sidenav">
@@ -202,9 +242,8 @@ Explore Page
   </div>
 </div>
 
+</body>
 <footer class="container-fluid text-center">
   <p>&copy;2018 DeepWisdom, LLC. All Rights Reserved.</p>
 </footer>
-
-</body>
 </html>

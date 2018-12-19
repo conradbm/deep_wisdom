@@ -154,12 +154,13 @@ class DeepWisdom:
 
         return ((kjv_bible_mapping,int2verse,verse2int),(tf_idf_bible_fit,tf_idf_bible_matrix),(X,y),model)
 
-    def query(self, conn, searchText):
-        print(type(searchText))
+    def query(self, conn, searchText, debug=False):
+        if debug:
+            print(type(searchText))
+            print(searchText)
         tfidf_matrix = self.tf_idf_bible_fit.transform([searchText])
         x1=tfidf_matrix.todense()
         #print("x1 shape", x1.shape)
-        
         
         with graph.as_default():
             v=self.model.predict(x1)[0]
@@ -172,9 +173,12 @@ class DeepWisdom:
                 results=select_book_chapter_verse(conn, (book, chapter_verse))[0]
                 self.topK.append((self.int2verse[index], results[3], v[index]))
 
-            ### NOTE: We reverse the topK because as they are written in Tkinter the first show up last. Ironic right? ###
-            print(searchText)
-            for thing in reversed(self.topK):
-                print(thing[0], thing[2])
-                print()
-            return self.topK
+            ### NOTE: We reverse the topK because as they are written in Tkinter the first show up last. Ironic right? ###    
+            results_dict={}
+            for thing in self.topK:
+                print(thing[0],thing[2])
+                results_dict[thing[0]]=thing[1]
+            print()
+            print()
+            print(results_dict)
+            return results_dict
