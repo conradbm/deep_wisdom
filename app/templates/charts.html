@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DeepWisdom - Bible Data Analytics Software</title>
+    <title>DeepWisdom - Bible Data Analytics Platform</title>
 
     <!-- Bootstrap core CSS-->
     <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -23,6 +23,57 @@
     <!-- Custom styles for this template-->
     <link href="static/css/sb-admin.css" rel="stylesheet">
 
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- AJAX -->
+    <script>
+      $(document).ready(function(){
+        var myPieChart = {};
+        function results_div_string(raw_json_data){
+          var results_string="";
+          for (var key in raw_json_data) {
+              if (raw_json_data.hasOwnProperty(key)) {
+                  console.log(key + " -> " + raw_json_data[key]);
+                  results_string+="<p><font size=\"2\"><strong>"+key+"</strong>:"+raw_json_data[key]+"</font></p>";
+              }
+          }
+          results_string+="<hr>"
+          return results_string;
+        }
+
+        $('#IdForm').on('submit',function (e) {
+           $.ajax({
+            type: 'post',
+            url: '/submit',
+            data: $('#IdForm').serialize(),
+             success: function (results) {
+                console.debug(results);
+                
+                // Populate pie chart div
+                //Plotly.newPlot('plot', results['pie_results'].data, results['pie_results'].layout);
+                
+                // Set new default font family and font color to mimic Bootstrap's default styling
+                Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                Chart.defaults.global.defaultFontColor = '#292b2c';
+                // Pie Chart Example
+                document.getElementById("myPieChart").innerHTML="";
+                var ctx = document.getElementById("myPieChart");
+
+                // BUG AFTER FIRST CHART IS SPAWNED.
+                var myPieChart = new Chart(ctx,results['pie_results']);
+                // Populate results div
+                //results_string=results_div_string(results["search_results"]);
+                //console.log(results_string);
+                //$('#resultsContainer').append(results_string);
+                //document.getElementById("resultsContainer").innerHTML=results_string;
+             }
+            });
+           e.preventDefault();
+           });
+        });
+    </script>
   </head>
 
   <body id="page-top">
@@ -36,15 +87,9 @@
       </button>
 
       <!-- Navbar Search -->
-      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <form id="IdForm" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" method='post' action="/submit">
         <div class="input-group">
-          <form id="IdForm" class="search-form">
-                      <div class="form-group has-feedback">
-                      <label for="search" class="sr-only">Search</label>
-                      <input type="text" class="form-control" name="search" id="search" placeholder="search">
-                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-            </form>
+          <input id='search' name="search" type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-primary" type="button">
               <i class="fas fa-search"></i>
@@ -226,8 +271,9 @@
     <!-- Demo scripts for this page-->
     <script src="static/js/demo/chart-area-demo.js"></script>
     <script src="static/js/demo/chart-bar-demo.js"></script>
+    <!--
     <script src="static/js/demo/chart-pie-demo.js"></script>
-
+    -->
   </body>
 
 </html>

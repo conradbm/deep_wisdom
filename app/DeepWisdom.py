@@ -154,7 +154,7 @@ class DeepWisdom:
 
         return ((kjv_bible_mapping,int2verse,verse2int),(tf_idf_bible_fit,tf_idf_bible_matrix),(X,y),model)
 
-    def query(self, conn, searchText, debug=False):
+    def query(self, conn, searchText, debug=True):
         if debug:
             print(type(searchText))
             print(searchText)

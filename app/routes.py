@@ -60,10 +60,11 @@ Functions from forms and other widgets
 def submit():
 	if DW is None:
 		print("Model not finished loading.")
-		text="<div class='jumobtron'><h1>Model not finished loading yet ...</h1></div><br><br>"
-		with open("templates/index.html", 'r') as handle:
-			text+=handle.read().replace('\n','')
-		return text
+		#text="<h1>Model not finished loading yet ...</h1></div><br><br>"
+		#with open("templates/index.html", 'r') as handle:
+		#	text+=handle.read().replace('\n','')
+		#return text
+		return render_template("index.html")
 	else:
 		print("Searching")
 		conn=get_db_connection()

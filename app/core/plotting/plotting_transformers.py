@@ -4,6 +4,30 @@ for JSON objects to become D3.js, Plotly, or other open source visualization too
 capture and output.
 """
 from collections import Counter
+import random
+
+def htmlcolor(r, g, b):
+    def _chkarg(a):
+        if isinstance(a, int): # clamp to range 0--255
+            if a < 0:
+                a = 0
+            elif a > 255:
+                a = 255
+        elif isinstance(a, float): # clamp to range 0.0--1.0 and convert to integer 0--255
+            if a < 0.0:
+                a = 0
+            elif a > 1.0:
+                a = 255
+            else:
+                a = int(round(a*255))
+        else:
+            raise ValueError('Arguments must be integers or floats.')
+        return a
+    r = _chkarg(r)
+    g = _chkarg(g)
+    b = _chkarg(b)
+    return '#{:02x}{:02x}{:02x}'.format(r,g,b)
+
 def pie_chart_reshape(searchText, data_dict):
 
 	"""
@@ -52,11 +76,21 @@ def pie_chart_reshape(searchText, data_dict):
 	l=list(map(lambda x:" ".join(x.split(" ")[:-1]), list(data_dict.keys())))
 	d2=dict(Counter(l))
 	d3=dict(sorted(d2.items(), key = lambda x: x[1], reverse=True))
+	colors=[]
+	for _,_ in d3.items():
+		r1=random.randint(0,255)
+		r2=random.randint(0,255)
+		r3=random.randint(0,255)
+		color=htmlcolor(r1,r2,r3)
+		colors.append(color)
 
-	pie_output= {'data':[{'labels':list(d3.keys()),
-	                      'values':list(d3.values()),
-	                      'type':'pie',
-	                      'hoverinfo':'label+percent',
-	                      'sort':False}],
-	            'layout': {'title': "Book Analysis: " + searchText}}
+	pie_output= {'type':'pie',
+            	 'data':{'labels':list(d3.keys()),
+                      	 'datasets':[{'data':list(d3.values()),
+                      	 			  'backgroundColor':colors}],
+                 'name': 'Books returned for: ' + searchText,
+                 'hoverinfo':'label+percent+name'},
+            	 'layout': {'title': "Book Analysis"}
+            	 }
+	print(pie_output)
 	return pie_output
