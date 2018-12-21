@@ -9,8 +9,10 @@ from gensim.summarization import keywords
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
+import math
 
 colors=None
+agg_labels=None
 def htmlcolor(r, g, b):
     def _chkarg(a):
         if isinstance(a, int): # clamp to range 0--255
@@ -80,23 +82,12 @@ def bar_chart_reshape(searchText, data_dict):
 	l=list(map(lambda x:" ".join(x.split(" ")[:-1]), list(data_dict.keys())))
 	d2=dict(Counter(l))
 	d3=dict(sorted(d2.items(), key = lambda x: x[1], reverse=True))
-	"""
-	colors=[]
-	for _,_ in d3.items():
-	    r1=random.randint(0,255)
-	    r2=random.randint(0,255)
-	    r3=random.randint(0,255)
-	    color=htmlcolor(r1,r2,r3)
-	    colors.append(color)
-	"""
-	bar_output= {'type':'bar',
-	             'data':{'labels':list(d3.keys()),
-	                     'datasets':[{'label': "Occurances: ",
+
+	bar_output= {'type':'horizontalBar',
+	             'data':{'labels':agg_labels,
+	                     'datasets':[{'label': "Occurances",
 	                     			  'data':list(d3.values()),
-	                                  'backgroundColor':colors}],
-	                     'name': 'Books returned for: ' + searchText,
-	                     'hoverinfo':'label+percent+name'},
-	             'layout': {'title': "Book Analysis"},
+	                                  'backgroundColor':colors}]},
 	             'options': {
 	                'scales': {
 	                  'xAxes': [{
@@ -120,7 +111,17 @@ def bar_chart_reshape(searchText, data_dict):
 	                },
 	                'legend': {
 	                  'display': False
-	                }
+	                },
+	                'responsive': True,
+	   
+		            'title': {
+		                'display': True,
+		                'text': searchText
+		            },
+		            'animation': {
+		                'animateScale': True,
+		                'animateRotate': True
+		            }
 	              }
 	            }
 	return bar_output
@@ -228,25 +229,31 @@ def scatter_chart_reshape(searchText, data_dict):
 	pca = PCA(n_components=2)
 	X_mapped = pca.fit_transform(X.todense())
 	data=[]
+	i=math.floor(len(X_mapped)/3)
 	for point in X_mapped:
-	    data.append({'x':point[0], 'y':point[1]})
+	    data.append({'x':point[0], 'y':point[1], 'r':i})
+	    i-=1
 
-	scatter_output= {
-						'type': 'scatter',
+	updated_colors=[]
+	for d in documents:
+		for i in range(len(agg_labels)):
+			if d == agg_labels[i]:
+				updated_colors.append(colors[i])
+
+	ranks=[i for i in range(len(documents))].reverse()
+	scatter_output= {	'type': 'scatter',
+								#'bubble',
 					    'data': {
-					    		'label':list(data_dict.keys()),
+					    		'label': "Proximity: ",
+					    		'labels':list(data_dict.keys()),
 						        'datasets': [{
 						            'data': data,
-						            'points':{
-						            	'fillColor':colors
-						            }
+						            'pointBackgroundColor':updated_colors
 						        }],
-						        'name': 'Books returned for: ' + searchText,
-		                 		'hoverinfo':'label+name'
 						    },
 					    'options': {
 					    	'title':{'display':True,
-			                         'text': 'Proximity of Vocabulary: ' + searchText},
+			                         'text':searchText},
 					        'scales': {
 					            'xAxes': [{
 					                'type': 'linear',
@@ -309,6 +316,8 @@ def pie_chart_reshape(searchText, data_dict):
 	d2=dict(Counter(l))
 	d3=dict(sorted(d2.items(), key = lambda x: x[1], reverse=True))
 	global colors
+	global agg_labels
+
 	colors=[]
 	for _,_ in d3.items():
 		r1=random.randint(0,255)
@@ -316,13 +325,26 @@ def pie_chart_reshape(searchText, data_dict):
 		r3=random.randint(0,255)
 		color=htmlcolor(r1,r2,r3)
 		colors.append(color)
+	agg_labels=list(d3.keys())
 
 	pie_output= {'type':'doughnut',
-            	 'data':{'labels':list(d3.keys()),
+            	 'data':{#'label': "Percentage: ",
+            	 		 'labels':agg_labels,
                       	 'datasets':[{'data':list(d3.values()),
-                      	 			  'backgroundColor':colors}],
-                 'name': 'Books returned for: ' + searchText,
-                 'hoverinfo':'label+percent+name'},
-            	 'layout': {'title': "Book Analysis"}
+                      	 			  'backgroundColor':colors}]},
+            	 'responsive': True,
+            'options': {
+	            'responsive': True,
+	   
+	            'title': {
+	                'display': True,
+	                'text': searchText
+	            },
+	            'animation': {
+	                'animateScale': True,
+	                'animateRotate': True
+	            }
+
+        }
             	 }
 	return pie_output

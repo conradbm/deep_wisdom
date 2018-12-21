@@ -124,7 +124,6 @@
                   // Create scatter chart
                   var ctxSc = document.getElementById("myScatterChart").getContext('2d');
                   myScatterChart = new Chart(ctxSc, results["scatter_results"]);
-                  myScatterChart.update();
                 }
                 else{
                   /*
@@ -142,25 +141,51 @@
 
                   // Update pie chart
                   myPieChart["data"]=results['pie_results']["data"];
-                  myPieChart.update();
 
                   // Update bar chart
                   myBarChart["data"]=results["bar_results"]["data"];
-                  myBarChart.update();
+                  
 
                   // Update bar chart
                   myScatterChart["data"]=results["scatter_results"]["data"];
-                  myScatterChart.update();
+                  myScatterChart["options"]=results["scatter_results"]["options"];
+                  
                 }
                 
+
+
                 // Insert data removing previous queries first
                 removeDataFromDataTable();
                 addDataToDataTable(results["search_results"]);
-
-
-                //console.log(results_string);
+                // Update Embedded Topics
                 keywordsHTMLString=getKeywordsString(results["keyword_results"]);
                 document.getElementById("keywordsContainer").innerHTML=keywordsHTMLString;
+
+                // Update everyone
+                myPieChart["options"]["tooltips"]["callbacks"]["label"]=function(tooltipItem, data) {
+                      //get the concerned dataset
+                      var dataset = data.datasets[tooltipItem.datasetIndex];
+                      //calculate the total of this data set
+                      var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                        return previousValue + currentValue;
+                      });
+                      //get the current items value
+                      var currentValue = dataset.data[tooltipItem.index];
+                      //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
+                      var percentage = Math.floor(((currentValue/total) * 100));
+                      var lab = data.labels[tooltipItem.index];
+                      return lab + ": " + percentage + "%";
+                    }
+                myPieChart.update();
+
+                myBarChart.update();
+                myScatterChart.update();
+                myScatterChart["options"]["tooltips"]["callbacks"]["label"]=function(tooltipItem, data) {
+                                                                                 var label = data.labels[tooltipItem.index];
+                                                                                 return label;
+                                                                              };
+                myScatterChart.update();
+
              }
             });
            e.preventDefault();
@@ -272,9 +297,9 @@
                 <div class="card mb-3">
                   <div class="card-header">
                     <i class="fas fa-chart-pie"></i>
-                    <p id="pieChartText">Pie Chart</p></div>
+                    <p id="pieChartText">Percentages</p></div>
                   <div class="card-body">
-                    <canvas id="myPieChart" width="100%" height="50"></canvas>
+                    <canvas id="myPieChart" width="100%" height="75"></canvas>
                   </div>
                   <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
@@ -283,9 +308,9 @@
               <div class="card mb-3">
                 <div class="card-header">
                   <i class="fas fa-chart-bar"></i>
-                  <p id="barChartText">Bar Chart</p></div>
+                  <p id="barChartText">Appearances</p></div>
                 <div class="card-body">
-                  <canvas id="myBarChart" width="100%" height="50"></canvas>
+                  <canvas id="myBarChart" width="100%" height="75"></canvas>
                 </div>
                 <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
               </div>
@@ -297,9 +322,9 @@
                 <div class="card mb-3">
                   <div class="card-header">
                     <i class="fa fa-camera-retro"></i>
-                    <p id="pieChartText">Scatter Chart</p></div>
+                    <p id="pieChartText">Proximity</p></div>
                   <div class="card-body">
-                    <canvas id="myScatterChart" width="100%" height="50"></canvas>
+                    <canvas id="myScatterChart" width="100%" height="75"></canvas>
                   </div>
                   <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
