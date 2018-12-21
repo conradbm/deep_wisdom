@@ -4,7 +4,7 @@ from flask import request
 from DeepWisdom import DeepWisdom, get_db_connection
 from threading import Thread
 from flask import render_template, jsonify
-from core.plotting.plotting_transformers import pie_chart_reshape
+from core.plotting.plotting_transformers import pie_chart_reshape, bar_chart_reshape, scatter_chart_reshape, keywords_reshape
 
 # Helper for killing python processes
 # pkill -f *.py
@@ -72,14 +72,25 @@ def submit():
 		#Consider json object being returned here.
 		#results_string="<br>".join(["<strong>"+i[0]+"</strong>"+ " "+i[1] for i in result_tuples])
 		pie_dict=pie_chart_reshape(searchText, search_dict)
+		bar_dict=bar_chart_reshape(searchText, search_dict)
+		scatter_dict=scatter_chart_reshape(searchText, search_dict)
+		keywords_list=keywords_reshape(searchText, search_dict)
 
 		results_dict={'search_results':search_dict,
-					  'pie_results':pie_dict}
+					  'pie_results':pie_dict,
+					  'bar_results':bar_dict,
+					  'scatter_results':scatter_dict,
+					  'keyword_results':keywords_list}
 		print("Search results")
 		print(results_dict["search_results"])
-		print()
 		print("Pie Results")
 		print(results_dict["pie_results"])
+		print("Bar Results")
+		print(results_dict["bar_results"])
+		print("Scatter results")
+		print(results_dict["scatter_results"])
+		print("Keyword results")
+		print(results_dict["keyword_results"])
 		return jsonify(results_dict)
 		
 		#return json.dumps(results_string)

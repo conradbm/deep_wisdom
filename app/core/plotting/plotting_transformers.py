@@ -5,7 +5,12 @@ capture and output.
 """
 from collections import Counter
 import random
+from gensim.summarization import keywords
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import PCA
 
+colors=None
 def htmlcolor(r, g, b):
     def _chkarg(a):
         if isinstance(a, int): # clamp to range 0--255
@@ -31,17 +36,230 @@ def htmlcolor(r, g, b):
 def bar_chart_reshape(searchText, data_dict):
 
 	"""
-	from gensim.summarization import keywords
-
-	running_kwds=[]
-	stop = set(stopwords.words('english'))
-	for k,v in d.items():
-	    running_kwds = running_kwds + keywords(v, split=True)
-
-set(running_kwds)
+	bar_chart_data= {type: 'bar',
+					  data: {
+					    labels: ["January", "February", "March", "April", "May", "June"],
+					    datasets: [{
+					      label: "Revenue",
+					      backgroundColor: "rgba(2,117,216,1)",
+					      borderColor: "rgba(2,117,216,1)",
+					      data: [4215, 5312, 6251, 7841, 9821, 14984],
+					    }],
+					  },
+					  options: {
+					    scales: {
+					      xAxes: [{
+					        time: {
+					          unit: 'month'
+					        },
+					        gridLines: {
+					          display: false
+					        },
+					        ticks: {
+					          maxTicksLimit: 6
+					        }
+					      }],
+					      yAxes: [{
+					        ticks: {
+					          min: 0,
+					          max: 15000,
+					          maxTicksLimit: 5
+					        },
+					        gridLines: {
+					          display: true
+					        }
+					      }],
+					    },
+					    legend: {
+					      display: false
+					    }
+					  }
+					});
 	"""
 
-	pass
+	l=list(map(lambda x:" ".join(x.split(" ")[:-1]), list(data_dict.keys())))
+	d2=dict(Counter(l))
+	d3=dict(sorted(d2.items(), key = lambda x: x[1], reverse=True))
+	"""
+	colors=[]
+	for _,_ in d3.items():
+	    r1=random.randint(0,255)
+	    r2=random.randint(0,255)
+	    r3=random.randint(0,255)
+	    color=htmlcolor(r1,r2,r3)
+	    colors.append(color)
+	"""
+	bar_output= {'type':'bar',
+	             'data':{'labels':list(d3.keys()),
+	                     'datasets':[{'label': "Occurances: ",
+	                     			  'data':list(d3.values()),
+	                                  'backgroundColor':colors}],
+	                     'name': 'Books returned for: ' + searchText,
+	                     'hoverinfo':'label+percent+name'},
+	             'layout': {'title': "Book Analysis"},
+	             'options': {
+	                'scales': {
+	                  'xAxes': [{
+	                    'gridLines': {
+	                      'display': False
+	                    },
+	                    'ticks': {
+	                      'maxTicksLimit': len(list(d3.keys())),
+	                    }
+	                  }],
+	                  'yAxes': [{
+	                    'ticks': {
+	                      'min': 0,
+	                      'max': max(list(d3.values())),
+	                      'maxTicksLimit': max(list(d3.values()))
+	                    },
+	                    'gridLines': {
+	                      'display': True
+	                    }
+	                  }],
+	                },
+	                'legend': {
+	                  'display': False
+	                }
+	              }
+	            }
+	return bar_output
+
+def keywords_reshape(searchText, data_dict):
+	"""
+	Return a list of overarching topics
+	"""
+	running_kwds=[]
+	for k,v in data_dict.items():
+	    running_kwds = running_kwds + keywords(v, split=True)
+
+	return list(set(running_kwds))
+
+def scatter_chart_reshape(searchText, data_dict):
+	"""
+		scatterData = {
+	    datasets: [{
+	      borderColor: 'rgba(99,0,125, .2)',
+	      backgroundColor: 'rgba(99,0,125, .5)',
+	      label: 'V(node2)',
+	      data: [{
+	        x: 25.1,
+	        y: -5.429,
+	      }, {
+	        x: 31.6,
+	        y: -6.944,
+	      }]
+	    }]
+	  }
+
+	  var config1 = new Chart.Scatter(ctxSc, {
+	    data: scatterData,
+	    options: {
+	      title: {
+	        display: true,
+	        text: 'Scatter Chart - Logarithmic X-Axis'
+	      },
+	      scales: {
+	        xAxes: [{
+	          type: 'logarithmic',
+	          position: 'bottom',
+	          ticks: {
+	            userCallback: function (tick) {
+	              var remain = tick / (Math.pow(10, Math.floor(Chart.helpers.log10(tick))));
+	              if (remain === 1 || remain === 2 || remain === 5) {
+	                return tick.toString() + 'Hz';
+	              }
+	              return '';
+	            },
+	          },
+	          scaleLabel: {
+	            labelString: 'Frequency',
+	            display: true,
+	          }
+	        }],
+	        yAxes: [{
+	          type: 'linear',
+	          ticks: {
+	            userCallback: function (tick) {
+	              return tick.toString() + 'dB';
+	            }
+	          },
+	          scaleLabel: {
+	            labelString: 'Voltage',
+	            display: true
+	          }
+	        }]
+	      }
+	    }
+	  });
+
+	  { type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Scatter Dataset',
+            data: [{
+                x: -10,
+                y: 0
+            }, {
+                x: 0,
+                y: 10
+            }, {
+                x: 10,
+                y: 5
+            }]
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                type: 'linear',
+                position: 'bottom'
+            }]
+        }
+    }
+});
+	"""
+	
+	
+	documents=list(map(lambda x:" ".join(x.split(" ")[:-1]), list(data_dict.keys())))
+	text=list(data_dict.values())
+	vectorizer = TfidfVectorizer()
+	X = vectorizer.fit_transform(text)
+	pca = PCA(n_components=2)
+	X_mapped = pca.fit_transform(X.todense())
+	data=[]
+	for point in X_mapped:
+	    data.append({'x':point[0], 'y':point[1]})
+
+	scatter_output= {
+						'type': 'scatter',
+					    'data': {
+					    		'label':list(data_dict.keys()),
+						        'datasets': [{
+						            'data': data,
+						            'points':{
+						            	'fillColor':colors
+						            }
+						        }],
+						        'name': 'Books returned for: ' + searchText,
+		                 		'hoverinfo':'label+name'
+						    },
+					    'options': {
+					    	'title':{'display':True,
+			                         'text': 'Proximity of Vocabulary: ' + searchText},
+					        'scales': {
+					            'xAxes': [{
+					                'type': 'linear',
+					                'position': 'bottom'
+					            }]
+					        },
+					        'legend': {
+					      				'display': False
+					    			}
+					    }
+					};
+	return scatter_output
+
 def pie_chart_reshape(searchText, data_dict):
 
 	"""
@@ -90,6 +308,7 @@ def pie_chart_reshape(searchText, data_dict):
 	l=list(map(lambda x:" ".join(x.split(" ")[:-1]), list(data_dict.keys())))
 	d2=dict(Counter(l))
 	d3=dict(sorted(d2.items(), key = lambda x: x[1], reverse=True))
+	global colors
 	colors=[]
 	for _,_ in d3.items():
 		r1=random.randint(0,255)
@@ -98,7 +317,7 @@ def pie_chart_reshape(searchText, data_dict):
 		color=htmlcolor(r1,r2,r3)
 		colors.append(color)
 
-	pie_output= {'type':'pie',
+	pie_output= {'type':'doughnut',
             	 'data':{'labels':list(d3.keys()),
                       	 'datasets':[{'data':list(d3.values()),
                       	 			  'backgroundColor':colors}],
