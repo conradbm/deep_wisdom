@@ -11,6 +11,7 @@
 
     <title>DeepWisdom - Bible Data Analytics Platform</title>
 
+
     <!-- Bootstrap core CSS-->
     <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -23,9 +24,26 @@
     <!-- Custom styles for this template-->
     <link href="static/css/sb-admin.css" rel="stylesheet">
 
+
+    <!-- Bootstrap core CSS-->
+    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Page level plugin CSS-->
+    <link href="static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="static/css/sb-admin.css" rel="stylesheet">
     <!-- JQUERY -->
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- #region datatables files -->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <!-- #endregion -->
 
     <!-- AJAX -->
     <script>
@@ -234,6 +252,10 @@
           </div>
 
 
+ <div id="content-wrapper">
+
+        <div class="container-fluid">
+
           <!-- DataTables Example -->
           <div class="card mb-3">
             <div class="card-header">
@@ -244,24 +266,47 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Ranking</th>
-                      <th>Reference</th>
+                      <th>Rank</th>
+                      <th>Location</th>
                       <th>Content</th>
                     </tr>
                   </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Location</th>
+                      <th>Content</th>
+                    </tr>
+                  </tfoot>
                   <tbody id="dataTableBody">
-                      <tr>
-                        <td>1</td>
-                        <td>Test</td>
-                        <td>Result</td>
-                      </tr>
+
+                    
+                    <tr>
+                      <td>Tiger Nixon</td>
+                      <td>System Architect</td>
+                      <td>Edinburgh</td>
+                    </tr>
+                    <tr>
+                      <td>Garrett Winters</td>
+                      <td>Accountant</td>
+                      <td>Tokyo</td>
+                    </tr>
+                    <tr>
+                      <td>Ashton Cox</td>
+                      <td>Junior Technical Author</td>
+                      <td>San Francisco</td>
+                    </tr>
+                  
                   </tbody>
                 </table>
               </div>
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
+
+        </div>
         <!-- /.container-fluid -->
+
 
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
@@ -318,6 +363,25 @@
     <!-- Demo scripts for this page-->
     <script src="static/js/demo/chart-area-demo.js"></script>
     <script src="static/js/demo/chart-bar-demo.js"></script>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+    <script src="static/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="static/vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="static/js/sb-admin.min.js"></script>
+
+    <!-- Demo scripts for this page-->
+    <script src="static/js/demo/datatables-demo.js"></script>
+
     <!--
     <script src="static/js/demo/chart-pie-demo.js"></script>
     -->
