@@ -10,7 +10,7 @@ from core.plotting.plotting_transformers import pie_chart_reshape
 # pkill -f *.py
 
 app = Flask(__name__)
-
+app.config['JSON_SORT_KEYS'] = False #return results in rank order
 """
 Initialization of model data
 """
@@ -39,7 +39,6 @@ def index():
 		# Load the data in another thread
 		async_create_class([])
 		initialized=True
-
 	return render_template("index.html")
 
 @app.route('/charts')
@@ -76,6 +75,11 @@ def submit():
 
 		results_dict={'search_results':search_dict,
 					  'pie_results':pie_dict}
+		print("Search results")
+		print(results_dict["search_results"])
+		print()
+		print("Pie Results")
+		print(results_dict["pie_results"])
 		return jsonify(results_dict)
 		
 		#return json.dumps(results_string)

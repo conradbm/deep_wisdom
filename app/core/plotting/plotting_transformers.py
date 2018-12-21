@@ -28,6 +28,20 @@ def htmlcolor(r, g, b):
     b = _chkarg(b)
     return '#{:02x}{:02x}{:02x}'.format(r,g,b)
 
+def bar_chart_reshape(searchText, data_dict):
+
+	"""
+	from gensim.summarization import keywords
+
+	running_kwds=[]
+	stop = set(stopwords.words('english'))
+	for k,v in d.items():
+	    running_kwds = running_kwds + keywords(v, split=True)
+
+set(running_kwds)
+	"""
+
+	pass
 def pie_chart_reshape(searchText, data_dict):
 
 	"""
@@ -92,5 +106,4 @@ def pie_chart_reshape(searchText, data_dict):
                  'hoverinfo':'label+percent+name'},
             	 'layout': {'title': "Book Analysis"}
             	 }
-	print(pie_output)
 	return pie_output
