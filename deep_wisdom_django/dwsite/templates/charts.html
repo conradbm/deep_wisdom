@@ -74,6 +74,7 @@
               count+=1;
           }
           
+          mydataTable.ajax.reload();
           //results_string+="<hr>";
           return;
         }
@@ -149,9 +150,7 @@
                   
                   // Update bar chart
                   myScatterChart["data"]=results["scatter_results"]["data"];
-                  //myScatterChart["options"]=results["scatter_results"]["options"];
-                
-
+                  myScatterChart["options"]=results["scatter_results"]["options"];
                 }
                 
 
@@ -177,9 +176,6 @@
                                                                                  return label;
                                                                               };
 
-                // Insert data removing previous queries first
-                removeDataFromDataTable();
-                addDataToDataTable(results["search_results"]);
                 // Update Embedded Topics
                 keywordsHTMLString=getKeywordsString(results["keyword_results"]);
                 document.getElementById("keywordsContainer").innerHTML=keywordsHTMLString;
@@ -188,6 +184,10 @@
                 myPieChart.update();
                 myBarChart.update();
                 myScatterChart.update();
+
+                // Insert data removing previous queries first
+                removeDataFromDataTable();
+                addDataToDataTable(results["search_results"]);
              }
             }
             );
