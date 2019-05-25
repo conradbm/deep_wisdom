@@ -127,7 +127,7 @@ class DeepWisdom:
         #y=np.array(list(map(lambda x:x[1][1], kjv_bible_mapping.items())))
         #print(".",)
         #Baseline -- Quality!
-        weights_path=os.path.join(root_dir,"data/weights-improvement-01-54.2576.hdf5")
+        weights_path=os.path.join(root_dir,"data/weights-improvement-01-54.2456.hdf5")
         global model
         model=self.load_trained_model(weights_path)
         global graph
@@ -135,6 +135,12 @@ class DeepWisdom:
         print(".")
         print("Load complete.")
 
+        # There exist nones because of the other datafiles I commented out above.
+        # Not all are needed, and I was experiencing extremely long load times 
+        # when opening the web app with all these data files. This is the leanest
+        # subset of data I could get the app down too to keep it functional, hence
+        # why some of the code is pretty ugly. It didn't have to be that way, I was
+        # forced due to my lack of understanding of deployment/scalability options.
         return ((None,int2verse,verse2int),(tf_idf_bible_fit,None),(None,None),model)
 
     def query(self,searchText, debug=True, connect=True):
