@@ -1,5 +1,12 @@
 <h1> DeepWisdom </h1>
 <h2> Deep Learning + Ancient Wisdom </h2>
+<h3> Team</h3>
+<ul>
+
+<li> <em>Blake Conrad</em> (<strong>CEO</strong> - Lead NLP/ML/AI Engineer)</li>
+</ul>
+<p>Contact us at <a href="">deepwisdom.hq@gmail.com</a></p>
+<em>
 <hr>
 <h2>About</h2>
 <p>In short, <em>DeepWisdom</em> is a platform that augments your understanding of the bible. This is done by finding unintuitive relationships within and between interrelated content. Hence, <em>DeepWisdom</em>
@@ -31,7 +38,7 @@ The goal of <em>DeepWisdom</em> is two-fold. First, offer a robust platform that
         <td>Blake</td>
         <td>Conrad</td>
         <td>Lead Engineer</td>
-        <td>bmc.cs@outlook.com</td>
+        <td>blake.cs.ml@gmail.com</td>
       </tr>
       <tr>
         <th scope="row">2</th>
@@ -50,6 +57,7 @@ The goal of <em>DeepWisdom</em> is two-fold. First, offer a robust platform that
 <hr>
 <h2>Run</h2>
 <code>git clone git@github.com:conradbm/deep_wisdom.git</code>
-<code>cd /deep_wisdom/app</code>
-<code>python routes.py </code>
+<code>cd /deep_wisdom/deep_wisdom_django/dwsite</code>
+<code>python manage.py runserver </code>
+<p>Then simply open your local browser to 127.0.0.1:8000 to see the working version.</p>
 <p>Please contact DeepWisdom support to obtain these data files, as they are not public.</p>
