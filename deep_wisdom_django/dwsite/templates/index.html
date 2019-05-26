@@ -5,9 +5,9 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Blake Conrad">
 
     <title>DeepWisdom - Bible Data Analytics Platform</title>
 
@@ -24,6 +24,11 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'deepwisdom/css/sb-admin.css' %}" rel="stylesheet">
 
+    <style>
+    .contactTable{
+      position: fixed !important;
+    }
+    </style>
   </head>
 
   <body id="page-top">
@@ -32,35 +37,15 @@
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
       
-      <a class="navbar-brand mr-1" href="../deepwisdom/">DeepWisdom.AI</a>
+      <a class="navbar-brand mr-1" href="../deepwisdom/">DeepWisdom</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
       </button>
-    
-      <!-- Navbar Search -->
-      
-      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-      <!--
-        <div class="input-group">
-          <form id="IdForm" class="search-form">
-                      <div class="form-group has-feedback">
-                      <label for="search" class="sr-only">Search</label>
-                      <input type="text" class="form-control" name="search" id="search" placeholder="search">
-                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-            </form>
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
-        -->
-      </form>
-      
+
 
       <!-- Navbar -->
+      <!--
       <ul class="navbar-nav ml-auto ml-md-0">
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -74,7 +59,7 @@
           </div>
         </li>
       </ul>
-
+    -->
     </nav>
 
     <div id="wrapper">
@@ -125,7 +110,7 @@
           <!-- Icon Cards-->
           
           <div>
-            <img src="{% static "deepwisdom/img/logo.png" %}">
+            <img src="{% static 'deepwisdom/img/logo.png' %}" style="max-width: 100%;">
             <hr>
             <h2>About</h2>
             <p>In short, <em>DeepWisdom</em> is a platform that augments your understanding of the bible. This is done by finding unintuitive relationships within and between interrelated content. Hence, <em>DeepWisdom</em>
@@ -134,6 +119,7 @@
              <h2>Objective</h2>
              <p>
              The goal of <em>DeepWisdom</em> is two-fold. First, offer a robust platform that yields truly unique and novel insights into scripture that would have otherwise gone undiscovered or unnoticed. Second, offer a globally accessible platform that effectively equipts all in their personal pursuit of wisdom with true value and insights.</p>
+             <div class="contactTable">
             <h2>Contact Roster</h2>
              <table class="table">
                 <thead>
@@ -156,6 +142,7 @@
                 </tbody>
               </table>
               <hr>
+            </div>
           </div>
 
         <!-- Sticky Footer -->

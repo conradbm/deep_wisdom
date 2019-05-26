@@ -6,10 +6,19 @@ capture and output.
 from collections import Counter
 import random
 from gensim.summarization import keywords
+from gensim.summarization.summarizer import summarize
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 import math
+from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize
+
+english_stopwords=stopwords.words('english')
+old_english_stopwords=["thee", "thy", "said","shalt", "thine", "thou",
+					 	"ye", "unto", "hath", "didst", "let", "lest", "shall",
+					 	"yea"]
+stops = english_stopwords + old_english_stopwords
 
 colors=None
 agg_labels=None
@@ -126,15 +135,30 @@ def bar_chart_reshape(searchText, data_dict):
 	            }
 	return bar_output
 
-def keywords_reshape(searchText, data_dict):
+def themes_reshape(searchText, data_dict):
 	"""
 	Return a list of overarching topics
 	"""
+	words = "\n".join(["\n".join([s for s in sent_tokenize(v)]) for k,v in data_dict.items()])
+	summ = summarize(words, ratio=0.5, split=False)
+	#summ+=words
+	kwds = list(filter(lambda x:not x in stops, keywords(summ, ratio=0.3, split=True, lemmatize=True)))
+	return kwds
+
+	"""old
 	running_kwds=[]
 	for k,v in data_dict.items():
 	    running_kwds = running_kwds + keywords(v, split=True)
-
+	
 	return list(set(running_kwds))
+  """
+def summary_reshape(searchText, data_dict):
+	"""
+	Return a list of overarching themes.
+	"""
+	words = "\n".join([v for k,v in data_dict.items()])
+	summ = summarize(words, split=True)
+	return summ
 
 def scatter_chart_reshape(searchText, data_dict):
 	"""
@@ -345,6 +369,9 @@ def pie_chart_reshape(searchText, data_dict):
 	                'display': True,
 	                'text': searchText
 	            },
+	            'legend': {
+		      				'display': False
+		    				},
 	            'animation': {
 	                'animateScale': True,
 	                'animateRotate': True

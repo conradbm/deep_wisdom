@@ -1,4 +1,5 @@
 import numpy as np
+import datetime
 import pickle
 import os
 import subprocess
@@ -83,7 +84,7 @@ class DeepWisdom:
         #self.X=data[0]
         #self.y=data[1]
         self.model=model
-
+    
     def create_model_baseline(self):
         #X Shape:  (31102, 12302)
         #y Shape:  (31102, 31102)
@@ -146,9 +147,10 @@ class DeepWisdom:
     def query(self,searchText, debug=True, connect=True):
 
         if connect:
-            self.conn=get_db_connection()
+            self.bible_conn=get_db_connection(loc=os.path.join("data","bible.db"))
+            self.history_conn=get_db_connection(loc=os.path.join("data","history.db"))
         if debug:
-            print("Getting search r")
+            print("Getting search")
             print(searchText)
         tfidf_matrix = self.tf_idf_bible_fit.transform([searchText])
         x1=tfidf_matrix.todense()
@@ -162,7 +164,7 @@ class DeepWisdom:
                 firstPart=self.int2verse[index].split(" ")
                 book=" ".join(i for i in firstPart[:-1])
                 chapter_verse=firstPart[-1]
-                results = self.conn.cursor().execute("SELECT * FROM T_Bible where T_Bible.book=? and T_Bible.chapter_verse=?", (book, chapter_verse)).fetchall()[0]
+                results = self.bible_conn.cursor().execute("SELECT * FROM T_Bible where T_Bible.book=? and T_Bible.chapter_verse=?", (book, chapter_verse)).fetchall()[0]
                 self.topK.append((self.int2verse[index], results[3], v[index]))
 
             ### NOTE: We reverse the topK because as they are written in Tkinter the first show up last. Ironic right? ###    
@@ -170,7 +172,14 @@ class DeepWisdom:
             for thing in self.topK:
                 print(thing[0],thing[2])
                 results_dict[thing[0]]=thing[1]
-            print()
-            print()
-            print(results_dict)
+            #print()
+            #print()
+            #print(results_dict)
+            self.history_conn.execute("""INSERT INTO T_SearchHistory (time, searchString, verseResults)
+              values(?, ?, ?)""",( str(datetime.datetime.now()), searchText, str(list(results_dict.keys())) ) )
+            self.history_conn.commit()
+            if debug:
+                print("Inserted search into database \n{}\n{}\n{}\n".format(str(datetime.datetime.now()),
+                                                                            searchText,
+                                                                            str(list(results_dict.keys()))))
             return results_dict
