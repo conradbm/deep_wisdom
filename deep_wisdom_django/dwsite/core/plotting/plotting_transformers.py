@@ -15,9 +15,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 
 english_stopwords=stopwords.words('english')
-old_english_stopwords=["thee", "thy", "said","shalt", "thine", "thou",
-					 	"ye", "unto", "hath", "didst", "let", "lest", "shall",
-					 	"yea"]
+old_english_stopwords=["thee", "thy", "shalt", "thine", "thou", "ye", "unto", "hath"]
 stops = english_stopwords + old_english_stopwords
 
 colors=None
@@ -369,9 +367,6 @@ def pie_chart_reshape(searchText, data_dict):
 	                'display': True,
 	                'text': searchText
 	            },
-	            'legend': {
-		      				'display': False
-		    				},
 	            'animation': {
 	                'animateScale': True,
 	                'animateRotate': True

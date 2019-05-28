@@ -144,7 +144,7 @@ class DeepWisdom:
         # forced due to my lack of understanding of deployment/scalability options.
         return ((None,int2verse,verse2int),(tf_idf_bible_fit,None),(None,None),model)
 
-    def query(self,searchText, debug=True, connect=True):
+    def query(self,searchText, debug=False, connect=True, K=50):
 
         if connect:
             self.bible_conn=get_db_connection(loc=os.path.join("data","bible.db"))
@@ -158,7 +158,7 @@ class DeepWisdom:
         
         with graph.as_default():
             v=self.model.predict(x1)[0]
-            indices = np.argsort(v)[-50:][::-1]
+            indices = np.argsort(v)[-K:][::-1]
             self.topK=[]
             for index in indices:
                 firstPart=self.int2verse[index].split(" ")
@@ -170,7 +170,8 @@ class DeepWisdom:
             ### NOTE: We reverse the topK because as they are written in Tkinter the first show up last. Ironic right? ###    
             results_dict={}
             for thing in self.topK:
-                print(thing[0],thing[2])
+                if debug:
+                    print(thing[0],thing[2])
                 results_dict[thing[0]]=thing[1]
             #print()
             #print()
