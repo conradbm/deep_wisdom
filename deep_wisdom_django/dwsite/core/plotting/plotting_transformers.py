@@ -15,11 +15,14 @@ from nltk.corpus import stopwords
 from nltk.tokenize import sent_tokenize
 
 english_stopwords=stopwords.words('english')
-old_english_stopwords=["thee", "thy", "shalt", "thine", "thou", "ye", "unto", "hath"]
+old_english_stopwords=["thee", "thy", "shalt", 
+				       "thine", "thou", "ye", "unto", 
+				       "hath", "shall", "thyself", 
+				       "said", "say", "saying", "whosoever","didst", "did","dont"]
 stops = english_stopwords + old_english_stopwords
-
 colors=None
 agg_labels=None
+
 def htmlcolor(r, g, b):
     def _chkarg(a):
         if isinstance(a, int): # clamp to range 0--255

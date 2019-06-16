@@ -24,11 +24,15 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'deepwisdom/css/sb-admin.css' %}" rel="stylesheet">
 
+    <!-- Social media connections -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <style>
     .contactTable{
       position: fixed !important;
     }
     </style>
+
   </head>
 
   <body id="page-top">
@@ -36,12 +40,97 @@
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      
       <a class="navbar-brand mr-1" href="../deepwisdom/">DeepWisdom</a>
 
+      <!-- COLLAPSE BUTTON -->
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
       </button>
+
+      <!-- DROPDOWN MENU OF REGISTRATION OPTIONS -->
+      <div class="dropdown">
+        <button class="btn btn-link btn-sm text-white order-1 order-sm-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu
+        </button>
+        <!-- USER REGISTER BUTTON -->
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item btn btn-default btn-rounded mb-4" href="#" data-toggle="modal" data-target="#modalRegisterForm">Register</a>
+          <a class="dropdown-item btn-default btn-rounded mb-4" href="#" data-toggle="modal" data-target="#modalLoginForm">Login</a>
+          <!-- USER LOGIN BUTTON -->
+        </div>
+      </div>
+
+      <!-- USER LOG IN MODAL -->
+      <form id="loginForm" class="" method="post" action=".">
+          <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                  <i class="fas fa-envelope prefix grey-text"></i>
+                  <input type="email" id="defaultForm-email" class="form-control validate" name="email">
+                  <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+                </div>
+
+                <div class="md-form mb-4">
+                  <i class="fas fa-lock prefix grey-text"></i>
+                  <input type="password" id="defaultForm-pass" class="form-control validate" name="password">
+                  <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+                </div>
+
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button id="signInButton" class="btn btn-default" type="submit">Login</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    <!-- USER REGISTER -->
+    <form id="registrationForm" class="" method="post" action=".">
+        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+              <button class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input type="text" id="orangeForm-name" class="form-control validate" name="name">
+                <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
+              </div>
+              <div class="md-form mb-5">
+                <i class="fas fa-envelope prefix grey-text"></i>
+                <input type="email" id="orangeForm-email" class="form-control validate" name="email">
+                <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
+              </div>
+
+              <div class="md-form mb-4">
+                <i class="fas fa-lock prefix grey-text"></i>
+                <input type="password" id="orangeForm-pass" class="form-control validate" name="password">
+                <label data-error="wrong" data-success="right" for="orangeForm-pass">password</label>
+              </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button class="btn btn-deep-orange" type="submit">Sign up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
 
       <!-- Navbar -->
@@ -108,17 +197,37 @@
           </ol>
 
           <!-- Icon Cards-->
-          
           <div>
             <img src="{% static 'deepwisdom/img/logo.png' %}" style="max-width: 100%;">
             <hr>
+            <blockquote>
+              <span>&#39;&#39;</span><em>Wisdom is the principal thing; therefore get wisdom: and with all thy getting get understanding.</em><span>&#39;&#39;</span>
+              <br>
+              <right><em>-Proverbs 4:7</em></right>
+             </blockquote>
             <h2>About</h2>
-            <p>In short, <em>DeepWisdom</em> is a platform that augments your understanding of the bible. This is done by finding unintuitive relationships within and between interrelated content. Hence, <em>DeepWisdom</em>
-             is a platform that blends the greatest wisdom in antiquity with state of the art <em>Artificial Intelligence</em>. Converting knowledge into understanding is one of the most profound and challenging tasks a human can face. This is where we come in, by integrating classical analytics techniques with state of the art <em>Artificial Intelligence</em> we are able to take your seeking and understanding of the bible to an entirely new level. For the first time in history, empowered by <em>DeepWisdom</em>, we are able to explore and discover novel, unintuitive, and purhaps otherwise, undiscovered relationships from deep within scripture. </p>
+            <p>In short, <em>DeepWisdom</em> is a platform that augments your understanding of the bible. The conversion of knowledge to understanding has perplexed biblical scholars, philosophers, mathematicians, and psychologists for centuries. Here at <em>DeepWisdom</em>, we seek to bridge this gap. From modern Deep Learning synthesized with ancient wisdom found in scripture, we integrate analytics to find deep connections for you.</p>
 
              <h2>Objective</h2>
              <p>
-             The goal of <em>DeepWisdom</em> is two-fold. First, offer a robust platform that yields truly unique and novel insights into scripture that would have otherwise gone undiscovered or unnoticed. Second, offer a globally accessible platform that effectively equipts all in their personal pursuit of wisdom with true value and insights.</p>
+             The goal of <em>DeepWisdom</em> is two-fold. First, to truly connect the dots for you within scripture; from characters, to parables and stories, to psalms, proverbs and statements. Second, offer a globally accessible platform that effectively equipts all in their personal pursuit of wisdom.</p>
+
+             <h2>Connect</h2>
+             <p>
+              We are passionate about learning with you. As we come together, we are able to accomplish so much more. Connect with us on any of our social outlets, we would love to hear from you.
+             </p>
+            <!--Facebook-->
+            <br>
+            <button type="button" class="btn btn-fb btn-primary"><i class="fab fa-facebook-f pr-1"></i> Facebook</button>
+            <!--Twitter-->
+            <button type="button" class="btn btn-tw btn-info"><i class="fab fa-twitter pr-1"></i> Twitter</button>
+            <!--Instagram-->
+            <button type="button" class="btn btn-ins btn-secondary"><i class="fab fa-instagram pr-1"></i> Instagram</button>
+            <!--Youtube-->
+            <button type="button" class="btn btn-yt btn-danger"><i class="fab fa-youtube pr-1"></i> Youtube</button>
+            <!--Email-->
+            <button type="button" class="btn btn-email btn-dark" ><i class="fas fa-envelope pr-1"></i> <a href="mailto:blake.cs.ml@gmail.com" style="text-decoration: none; background-color: none;color:white;">Email</a></button>
+
              <div class="contactTable">
             <h2>Contact Roster</h2>
              <table class="table">

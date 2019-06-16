@@ -42,13 +42,13 @@ class MacOSFile(object):
 
     def write(self, buffer):
         n = len(buffer)
-        print("writing total_bytes=%s..." % n, flush=True)
+        print("writing total_bytes=%{}..".format(n))
         idx = 0
         while idx < n:
             batch_size = min(n - idx, 1 << 31 - 1)
-            print("writing bytes [%s, %s)... " % (idx, idx + batch_size), end="", flush=True)
+            print("writing bytes [{}, {})... ".format(idx, idx + batch_size))
             self.f.write(buffer[idx:idx + batch_size])
-            print("done.", flush=True)
+            print("done.")
             idx += batch_size
 
 def pickle_dump(obj, file_path):
@@ -144,7 +144,7 @@ class DeepWisdom:
         # forced due to my lack of understanding of deployment/scalability options.
         return ((None,int2verse,verse2int),(tf_idf_bible_fit,None),(None,None),model)
 
-    def query(self,searchText, debug=False, connect=True, K=50):
+    def query(self,searchText, ip, debug=False, connect=True, K=50):
 
         if connect:
             self.bible_conn=get_db_connection(loc=os.path.join("data","bible.db"))
@@ -176,8 +176,8 @@ class DeepWisdom:
             #print()
             #print()
             #print(results_dict)
-            self.history_conn.execute("""INSERT INTO T_SearchHistory (time, searchString, verseResults)
-              values(?, ?, ?)""",( str(datetime.datetime.now()), searchText, str(list(results_dict.keys())) ) )
+            self.history_conn.execute("""INSERT INTO T_SearchHistory (time, IP, searchString, verseResults)
+              values(?, ?, ?, ?)""",( str(datetime.datetime.now()), ip, searchText, str(list(results_dict.keys())) ) )
             self.history_conn.commit()
             if debug:
                 print("Inserted search into database \n{}\n{}\n{}\n".format(str(datetime.datetime.now()),

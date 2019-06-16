@@ -59,6 +59,8 @@
         var myBarChart;
         var myScatterChart;
         var myDataTable = $('#dataTable').DataTable();
+        var userName;
+        var userId;
         function addDataToDataTable(raw_json_data){
           var results_string="";
           var count=0;
@@ -90,18 +92,68 @@
           results_string="";
           for(var i in raw_json_data)
           {
-            console.log(i);
-            results_string += "<font size=\"4\">"+ raw_json_data[i].toString() +"</font>,  ";
+            //console.log(i);
+            results_string += "<font size=\"3\">"+ raw_json_data[i].toString() +"</font>,  ";
             //results_string+="<tr><td>"+count.toString()+"</td><td>"+key+"</td><td>"+raw_json_data[key]+"</td></tr>";
           }
           return results_string.slice(0, results_string.length-3);
         }
+        function getCognitionString(raw_json_data){
+          results_string="";
+          for(var i in raw_json_data)
+          {
+            //console.log(i);
+            results_string += "<strong><font size=\"2\">"+ i +"</font></strong> "
+            results_string += "<font size=\"2\">"+ raw_json_data[i].toString() +"</font>";
+            results_string += "<br><br>"
+            //results_string+="<tr><td>"+count.toString()+"</td><td>"+key+"</td><td>"+raw_json_data[key]+"</td></tr>";
+          }
+          return results_string;
+        }
+
+        $('#registrationForm').on('submit',function (e) {
+           $.ajax({
+            type: 'post',
+            url: '.',
+            data: $('#registrationForm').serialize(),
+             success: function (results) {
+                console.debug(results);
+                userId=results['id'];
+                userName=results['name'];
+                $('#loginUsername').text('Hello, '+userName);
+                //console.debug($('#registrationForm').serialize()["name"]);
+                //console.debug($('#registrationForm').serialize()["email"]);
+                //console.debug($('#registrationForm').serialize()["password"]);
+            }
+           });
+           e.preventDefault();
+           $('#modalRegisterForm').modal('toggle');
+        });
+
+        $('#loginForm').on('submit',function (e) {
+           $.ajax({
+            type: 'post',
+            url: '.',
+            data: $('#loginForm').serialize(),
+             success: function (results) {
+                console.debug(results);
+                if(results.hasOwnProperty('name'))
+                {
+                    $('#loginUsername').text('Hello, '+results['name']);
+                }
+                //console.debug($('#loginForm').serialize()["email"]);
+                //console.debug($('#loginForm').serialize()["password"]);
+            }
+           });
+           e.preventDefault();
+           $('#modalLoginForm').modal('toggle');
+        });
 
         $('#IdForm').on('submit',function (e) {
            $.ajax({
             type: 'get',
             url: '.',
-            data: $('#IdForm').serialize(),
+            data: $('#IdForm').serialize(), // how do add userId to the input stream?
              success: function (results) {
                 console.debug(results);
                 console.debug($('#IdForm').serialize()["search"]);
@@ -181,6 +233,14 @@
                 keywordsHTMLString=getKeywordsString(results["keyword_results"]);
                 document.getElementById("keywordsContainer").innerHTML=keywordsHTMLString;
 
+                // Update Cognition
+                cognitionHTMLStringAgg=getCognitionString(results["chat_results_agg"]);
+                document.getElementById("cognitionContainer1").innerHTML=cognitionHTMLStringAgg;
+
+                // Update Cognition
+                //cognitionHTMLStringSpec=getCognitionString(results["chat_results_specific"]);
+                //document.getElementById("cognitionContainer2").innerHTML=cognitionHTMLStringSpec;
+
                 // Update everyone
                 myPieChart.update();
                 myBarChart.update();
@@ -210,6 +270,99 @@
         <i class="fas fa-bars"></i>
       </button>
 
+      <!-- DROP DOWN MENU OF REGISTRATION OPTIONS -->
+      <div class="dropdown">
+        <button class="btn btn-link btn-sm text-white order-1 order-sm-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu
+        </button>
+        <!-- USER REGISTER BUTTON -->
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item btn btn-default btn-rounded mb-4" href="#" data-toggle="modal" data-target="#modalRegisterForm">Register</a>
+          <a class="dropdown-item btn-default btn-rounded mb-4" href="#" data-toggle="modal" data-target="#modalLoginForm">Login</a>
+          <!-- USER LOGIN BUTTON -->
+        </div>
+      </div>
+
+
+      <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a id="loginUsername" class="nav-link" href="#">Hello, Guest</a>
+            </li>
+        </ul>
+    </div>
+
+      <!-- USER LOG IN MODAL -->
+      <form id="loginForm" class="" method='post' action=".">
+          <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body mx-3">
+                <div class="md-form mb-5">
+                  <i class="fas fa-envelope prefix grey-text"></i>
+                  <input type="email" id="defaultForm-email" class="form-control validate" name="email">
+                  <label data-error="wrong" data-success="right" for="defaultForm-email">Your email</label>
+                </div>
+
+                <div class="md-form mb-4">
+                  <i class="fas fa-lock prefix grey-text"></i>
+                  <input type="password" id="defaultForm-pass" class="form-control validate" name="password">
+                  <label data-error="wrong" data-success="right" for="defaultForm-pass">Your password</label>
+                </div>
+
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button id="signInButton" class="btn btn-default" type="submit">Login</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    <!-- USER REGISTER -->
+    <form id="registrationForm" class="" method='post' action=".">
+        <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+              <button class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body mx-3">
+              <div class="md-form mb-5">
+                <i class="fas fa-user prefix grey-text"></i>
+                <input type="text" id="orangeForm-name" class="form-control validate" name="name">
+                <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
+              </div>
+              <div class="md-form mb-5">
+                <i class="fas fa-envelope prefix grey-text"></i>
+                <input type="email" id="orangeForm-email" class="form-control validate" name="email">
+                <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
+              </div>
+
+              <div class="md-form mb-4">
+                <i class="fas fa-lock prefix grey-text"></i>
+                <input type="password" id="orangeForm-pass" class="form-control validate" name="password">
+                <label data-error="wrong" data-success="right" for="orangeForm-pass">password</label>
+              </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button class="btn btn-deep-orange" type="submit">Sign up</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
       <!-- Navbar -->
       <!--
@@ -282,12 +435,12 @@
             <img src="{% static 'deepwisdom/img/logo.png' %}" style="max-width: 100%;">
             <hr>
             <h2>Explore</h2>
-            <p>Recommendation is powerful. We have algorithms that connect your text to deep wisdom lodged within scripture and the minds of hundreds of biblical scholars. Whatever word or phrase you are interested in deeping your understanding of, go ahead and explore. Even pasting full phrases or bible verses will illuminate a suite of cross references trained on by biblical scholars. With that, feel free to explore, your results will populate below.</p>
+            <p>We have built a search engine trained to make deep connections for you. Go explore some topic or section of scripture you want to dig further into!</p>
             <hr>
               <!-- Navbar Search -->
               <form id="IdForm" class="" method='get' action=".">
                 <div class="input-group">
-                  <input id='search' name="search" type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                  <input id='search' name="search" type="text" class="form-control" placeholder="Search for something you are interested in ..." aria-label="Search" aria-describedby="basic-addon2">
                   <div class="input-group-append">
                     <button class="btn btn-primary" type="submit">
                       <i class="fas fa-search"></i>
@@ -343,6 +496,18 @@
                     <p id="pieChartText">Themes</p></div>
                   <div class="card-body">
                     <div id="keywordsContainer"></div>
+                  </div>
+                  <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="card mb-3">
+                  <div class="card-header">
+                    <i class="fa fa-cogs"></i>
+                    <p id="pieChartText">Cognition</p></div>
+                  <div class="card-body">
+                    <div id="cognitionContainer1"></div>
                   </div>
                   <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
                 </div>
