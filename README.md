@@ -1,11 +1,7 @@
 <h1> DeepWisdom </h1>
 <h2> Deep Learning + Ancient Wisdom </h2>
-<h3> Team</h3>
-<ul>
 
-<li> <em>Blake Conrad</em> (<strong>CEO</strong> - Lead NLP/ML/AI Engineer)</li>
-</ul>
-<p>Contact us at <a href="">deepwisdom.hq@gmail.com</a></p>
+The link to the app is [here](https://deepwisdom.herokuapp.com).
 <em>
 <hr>
 <h2>About</h2>
